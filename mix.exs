@@ -51,6 +51,7 @@ defmodule Eshop.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.0.0"},
       {:postgrex, ">= 0.0.0"},
+      {:salad_ui, "~> 0.14"},
       {:styler, "~> 1.4", only: [:dev, :test], runtime: false},
       {:swoosh, "~> 1.5"},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},

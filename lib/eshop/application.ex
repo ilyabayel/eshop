@@ -17,7 +17,8 @@ defmodule Eshop.Application do
       # Start a worker by calling: Eshop.Worker.start_link(arg)
       # {Eshop.Worker, arg},
       # Start to serve requests, typically the last entry
-      EshopWeb.Endpoint
+      EshopWeb.Endpoint,
+      TwMerge.Cache
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
