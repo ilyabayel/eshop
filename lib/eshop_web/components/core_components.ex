@@ -179,6 +179,7 @@ defmodule EshopWeb.CoreComponents do
   """
   attr :type, :string, default: nil
   attr :class, :string, default: nil
+  attr :variant, :string, default: "default"
   attr :rest, :global, include: ~w(disabled form name value)
 
   slot :inner_block, required: true
@@ -191,6 +192,7 @@ defmodule EshopWeb.CoreComponents do
         "phx-submit-loading:opacity-75",
         @class
       ]}
+      variant={@variant}
       {@rest}
     >
       {render_slot(@inner_block)}

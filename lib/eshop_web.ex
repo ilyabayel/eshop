@@ -51,6 +51,14 @@ defmodule EshopWeb do
     end
   end
 
+  def component do
+    quote do
+      use EshopWeb.Component
+
+      unquote(html_helpers())
+    end
+  end
+
   def live_view do
     quote do
       use Phoenix.LiveView,
