@@ -12,15 +12,14 @@ defmodule Eshop.Market.Schemas.Product do
 
   @type t :: %Product{}
 
-  @required_fields [:title, :image_url, :price_amount, :price_currency, :stock]
+  @required_fields [:title, :image_url, :price, :stock]
   @optional_fields [:description]
 
   schema "products" do
     field :title, :string
     field :description, :string
     field :image_url, :string
-    field :price_amount, Money.Ecto.Amount.Type
-    field :price_currency, Money.Ecto.Currency.Type
+    field :price, Money.Ecto.Composite.Type
     field :stock, :integer
 
     many_to_many :pricing_rules, PricingRule, join_through: "pricing_rules_products"

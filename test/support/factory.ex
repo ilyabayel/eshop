@@ -21,8 +21,7 @@ defmodule Eshop.Factory do
       title: sequence(:title, &"product-#{&1}"),
       description: sequence(:description, &"description of product-#{&1}"),
       image_url: "/images/product.jpg",
-      price_amount: 1_00,
-      price_currency: :GBP,
+      price: Money.new(1_00, :GBP),
       stock: 1
     }
   end

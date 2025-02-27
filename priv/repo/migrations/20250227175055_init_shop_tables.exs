@@ -6,16 +6,13 @@ defmodule Eshop.Repo.Migrations.InitShopTables do
       add :title, :string, null: false
       add :description, :text
       add :image_url, :string
-      add :price_amount, :integer
-      add :price_currency, :string
+      add :price, :money_with_currency
       add :stock, :integer, default: 0
 
       timestamps(type: :utc_datetime_usec)
     end
 
     create table(:carts) do
-      add :total_price, :decimal, precision: 10, scale: 2
-      add :subtotal_price, :decimal, precision: 10, scale: 2
       add :user_id, references(:users), null: true
 
       timestamps(type: :utc_datetime_usec)
