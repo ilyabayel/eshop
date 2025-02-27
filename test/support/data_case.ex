@@ -25,6 +25,7 @@ defmodule Eshop.DataCase do
       import Ecto.Query
       import Eshop.DataCase
 
+      alias Eshop.Factory, as: F
       alias Eshop.Repo
     end
   end
