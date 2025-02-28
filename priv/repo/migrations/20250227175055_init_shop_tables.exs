@@ -31,8 +31,7 @@ defmodule Eshop.Repo.Migrations.InitShopTables do
     create table(:pricing_rules) do
       add :name, :string, null: false
       add :description, :text
-      add :strategy, :string, null: false
-      add :strategy_variables, :map, null: false
+      add :strategy, :map, null: false
 
       timestamps(type: :utc_datetime_usec)
     end

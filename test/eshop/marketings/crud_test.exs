@@ -1,0 +1,50 @@
+defmodule Eshop.Marketing.CRUDTest do
+  use Eshop.DataCase, async: true
+
+  alias Eshop.Marketing.CRUD
+  alias Eshop.Marketing.Schemas.PricingRule
+
+  describe "create_pricing_rule/1" do
+    test "should create buy_x_get_y pricing rule" do
+      attrs = %{
+        name: "test",
+        description: "test description",
+        strategy: %{
+          type: "buy_x_get_y",
+          buy_quantity: 2,
+          get_quantity: 1
+        }
+      }
+
+      assert {:ok, %PricingRule{}} = CRUD.create_pricing_rule(attrs)
+    end
+
+    test "should create discount_fixed pricing rule" do
+      attrs = %{
+        name: "test",
+        description: "test description",
+        strategy: %{
+          type: "discount_fixed",
+          minimum_quantity: 2,
+          discount: Money.new(1_00)
+        }
+      }
+
+      assert {:ok, %PricingRule{}} = CRUD.create_pricing_rule(attrs)
+    end
+
+    test "should create discount_percentage pricing rule" do
+      attrs = %{
+        name: "test",
+        description: "test description",
+        strategy: %{
+          type: "discount_percentage",
+          minimum_quantity: 2,
+          discount: 10
+        }
+      }
+
+      assert {:ok, %PricingRule{}} = CRUD.create_pricing_rule(attrs)
+    end
+  end
+end

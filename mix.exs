@@ -54,6 +54,7 @@ defmodule Eshop.MixProject do
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.0.0"},
+      {:polymorphic_embed, "~> 5.0"},
       {:postgrex, ">= 0.0.0"},
       {:salad_ui, "~> 0.14"},
       {:styler, "~> 1.4", only: [:dev, :test], runtime: false},

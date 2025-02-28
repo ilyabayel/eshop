@@ -72,8 +72,8 @@ defmodule EshopWeb.Router do
       on_mount: [{EshopWeb.UserAuth, :mount_current_user}] do
       live "/", IndexLive
 
-      live "/products", Products.IndexLive
-      live "/products/:id", Products.ShowLive
+      live "/products", IndexLive
+      live "/products/:id", ShowLive
 
       live "/checkout", Checkout.IndexLive
 

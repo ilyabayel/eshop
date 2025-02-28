@@ -36,18 +36,11 @@ defmodule Eshop.Factory do
     %PricingRule{
       name: sequence(:name, &"Pricing Rule #{&1}"),
       description: sequence(:description, &"Description for pricing rule #{&1}"),
-      strategy:
-        sequence(:strategy, fn i ->
-          Enum.at([:discount_percentage, :discount_fixed, :buy_x_get_y], rem(i, 3))
-        end),
-      strategy_variables:
-        sequence(:strategy_variables, fn i ->
-          case rem(i, 3) do
-            0 -> %{minimum_quantity: 2, percentage: 10}
-            1 -> %{minimum_quantity: 3, discount: 500}
-            2 -> %{x: 2, y: 1}
-          end
-        end)
+      strategy: %{
+        type: :discount_fixed,
+        minimum_quantity: 0,
+        discount: Money.new(10, :GBP)
+      }
     }
   end
 
