@@ -1,4 +1,4 @@
-defmodule Eshop.Market.Schemas.PricingRule do
+defmodule Eshop.Marketing.Schemas.PricingRule do
   @moduledoc """
   Pricing rule schema.
 
@@ -11,12 +11,10 @@ defmodule Eshop.Market.Schemas.PricingRule do
 
   import Ecto.Changeset
 
-  alias Eshop.Market.Schemas.PricingRule
-  alias Eshop.Market.Schemas.Product
+  alias Eshop.Marketing.Schemas.PricingRule
+  alias Eshop.Products.Schemas.Product
 
   @type t :: %PricingRule{}
-
-  @required_fields [:name, :description, :strategy, :strategy_variables]
 
   schema "pricing_rules" do
     field :name, :string
@@ -37,8 +35,10 @@ defmodule Eshop.Market.Schemas.PricingRule do
 
   @spec changeset(PricingRule.t(), map()) :: Ecto.Changeset.t()
   def changeset(%PricingRule{} = pricing_rule, attrs) do
+    required_fields = [:name, :description, :strategy, :strategy_variables]
+
     pricing_rule
-    |> cast(attrs, @required_fields)
-    |> validate_required(@required_fields)
+    |> cast(attrs, required_fields)
+    |> validate_required(required_fields)
   end
 end

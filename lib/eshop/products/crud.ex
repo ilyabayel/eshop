@@ -1,7 +1,7 @@
-defmodule Eshop.Market.Services.ProductsCRUD do
+defmodule Eshop.Products.CRUD do
   @moduledoc false
 
-  alias Eshop.Market.Schemas.Product
+  alias Eshop.Products.Schemas.Product
   alias Eshop.Repo
 
   def create(attrs) do

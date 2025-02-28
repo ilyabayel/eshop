@@ -1,8 +1,8 @@
-defmodule Eshop.Market.Services.ProductsCRUDTest do
+defmodule Eshop.Products.Services.CRUDTest do
   use Eshop.DataCase, async: true
 
-  alias Eshop.Market.Schemas.Product
-  alias Eshop.Market.Services.ProductsCRUD
+  alias Eshop.Products.CRUD
+  alias Eshop.Products.Schemas.Product
 
   describe "create/1" do
     test "creates a product with valid attributes" do
@@ -14,7 +14,7 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
         stock: 1
       }
 
-      assert {:ok, %Product{} = product} = ProductsCRUD.create(valid_attrs)
+      assert {:ok, %Product{} = product} = CRUD.create(valid_attrs)
 
       assert %{
                title: "Sample Product",
@@ -27,7 +27,7 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
 
     test "returns error with invalid attributes" do
       invalid_attrs = %{description: "Invalid product"}
-      assert {:error, %Ecto.Changeset{}} = ProductsCRUD.create(invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = CRUD.create(invalid_attrs)
     end
   end
 
@@ -41,7 +41,7 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
         stock: 5
       }
 
-      {:ok, product} = ProductsCRUD.create(product_attrs)
+      {:ok, product} = CRUD.create(product_attrs)
 
       %{product: product}
     end
@@ -55,7 +55,7 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
         stock: 10
       }
 
-      assert {:ok, %Product{} = updated_product} = ProductsCRUD.update(product, update_attrs)
+      assert {:ok, %Product{} = updated_product} = CRUD.update(product, update_attrs)
 
       assert updated_product.title == "Updated Product"
       assert updated_product.description == "Updated description"
@@ -67,7 +67,7 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
     test "updates a product with partial attributes", %{product: product} do
       update_attrs = %{title: "Partially Updated Product"}
 
-      assert {:ok, %Product{} = updated_product} = ProductsCRUD.update(product, update_attrs)
+      assert {:ok, %Product{} = updated_product} = CRUD.update(product, update_attrs)
 
       assert updated_product.title == "Partially Updated Product"
       assert updated_product.description == product.description
@@ -79,7 +79,7 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
     test "returns error when updating with invalid attributes", %{product: product} do
       invalid_attrs = %{title: nil, stock: "invalid"}
 
-      assert {:error, %Ecto.Changeset{}} = ProductsCRUD.update(product, invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = CRUD.update(product, invalid_attrs)
 
       # Verify the product wasn't changed
       db_product = Repo.get(Product, product.id)
@@ -97,18 +97,18 @@ defmodule Eshop.Market.Services.ProductsCRUDTest do
         stock: 3
       }
 
-      {:ok, product} = ProductsCRUD.create(product_attrs)
+      {:ok, product} = CRUD.create(product_attrs)
 
       %{product: product}
     end
 
     test "deletes the given product", %{product: product} do
-      assert {:ok, %Product{}} = ProductsCRUD.delete(product.id)
+      assert {:ok, %Product{}} = CRUD.delete(product.id)
       assert Repo.get(Product, product.id) == nil
     end
 
     test "returns error when product doesn't exist" do
-      assert {:error, _} = ProductsCRUD.delete(1)
+      assert {:error, _} = CRUD.delete(1)
     end
   end
 end

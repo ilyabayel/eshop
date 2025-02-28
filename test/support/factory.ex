@@ -4,10 +4,10 @@ defmodule Eshop.Factory do
   use ExMachina.Ecto, repo: Eshop.Repo
 
   alias Eshop.Accounts.User
-  alias Eshop.Market.Schemas.Cart
-  alias Eshop.Market.Schemas.CartProduct
-  alias Eshop.Market.Schemas.PricingRule
-  alias Eshop.Market.Schemas.Product
+  alias Eshop.CartAndCheckout.Schemas.Cart
+  alias Eshop.CartAndCheckout.Schemas.CartProduct
+  alias Eshop.Marketing.Schemas.PricingRule
+  alias Eshop.Products.Schemas.Product
 
   def user_factory do
     %User{

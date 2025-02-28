@@ -1,4 +1,4 @@
-defmodule Eshop.Market.Schemas.Cart do
+defmodule Eshop.CartAndCheckout.Schemas.Cart do
   @moduledoc """
   Cart schema for Eshop application.
 
@@ -10,12 +10,10 @@ defmodule Eshop.Market.Schemas.Cart do
   import Ecto.Changeset
 
   alias Eshop.Accounts.User
-  alias Eshop.Market.Schemas.Cart
-  alias Eshop.Market.Schemas.Product
+  alias Eshop.CartAndCheckout.Schemas.Cart
+  alias Eshop.Products.Schemas.Product
 
   @type t :: %Cart{}
-
-  @optional_fields [:user_id]
 
   schema "carts" do
     many_to_many :products, Product, join_through: "carts_products"
@@ -26,6 +24,8 @@ defmodule Eshop.Market.Schemas.Cart do
 
   @spec changeset(Cart.t(), map()) :: Ecto.Changeset.t()
   def changeset(%Cart{} = cart, attrs) do
-    cast(cart, attrs, @optional_fields)
+    optional_fields = [:user_id]
+
+    cast(cart, attrs, optional_fields)
   end
 end

@@ -1,17 +1,15 @@
-defmodule Eshop.Market.Schemas.CartProduct do
+defmodule Eshop.CartAndCheckout.Schemas.CartProduct do
   @moduledoc false
 
   use Ecto.Schema
 
   import Ecto.Changeset
 
-  alias Eshop.Market.Schemas.Cart
-  alias Eshop.Market.Schemas.CartProduct
-  alias Eshop.Market.Schemas.Product
+  alias Eshop.CartAndCheckout.Schemas.Cart
+  alias Eshop.CartAndCheckout.Schemas.CartProduct
+  alias Eshop.Products.Schemas.Product
 
   @type t :: %CartProduct{}
-
-  @required_fields [:quantity, :product_id, :cart_id]
 
   schema "cart_products" do
     field :quantity, :integer
@@ -23,8 +21,10 @@ defmodule Eshop.Market.Schemas.CartProduct do
 
   @spec changeset(CartProduct.t(), map()) :: Ecto.Changeset.t()
   def changeset(cart_product, attrs) do
+    required_fields = [:quantity, :product_id, :cart_id]
+
     cart_product
-    |> cast(attrs, @required_fields)
-    |> validate_required(@required_fields)
+    |> cast(attrs, required_fields)
+    |> validate_required(required_fields)
   end
 end
