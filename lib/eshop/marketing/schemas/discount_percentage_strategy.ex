@@ -10,7 +10,7 @@ defmodule Eshop.Marketing.Schemas.DiscountPercentageStrategy do
 
   embedded_schema do
     field :type, :string
-    field :discount_percentage, :integer
+    field :discount_percentage, :decimal
     field :minimum_quantity, :integer
   end
 
@@ -18,7 +18,6 @@ defmodule Eshop.Marketing.Schemas.DiscountPercentageStrategy do
     strategy
     |> cast(attrs, @required_fields)
     |> validate_required(@required_fields)
-    |> validate_number(:discount_percentage, greater_than_or_equal_to: 0, less_than_or_equal_to: 100)
     |> validate_number(:minimum_quantity, greater_than: 0)
   end
 end

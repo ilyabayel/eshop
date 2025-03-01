@@ -5,9 +5,8 @@ defmodule Eshop.Products.Schemas.Product do
 
   import Ecto.Changeset
 
-  alias Eshop.CartAndCheckout.Schemas.Cart
-  alias Eshop.CartAndCheckout.Schemas.CartProduct
   alias Eshop.Marketing.Schemas.PricingRule
+  alias Eshop.Marketing.Schemas.PricingRuleProduct
   alias Eshop.Products.Schemas.Product
 
   @type t :: %Product{}
@@ -19,8 +18,7 @@ defmodule Eshop.Products.Schemas.Product do
     field :price, Money.Ecto.Composite.Type
     field :stock, :integer
 
-    many_to_many :pricing_rules, PricingRule, join_through: "pricing_rules_products"
-    many_to_many :carts, Cart, join_through: CartProduct
+    many_to_many :pricing_rules, PricingRule, join_through: PricingRuleProduct
 
     timestamps(type: :utc_datetime_usec)
   end

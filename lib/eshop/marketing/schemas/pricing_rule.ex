@@ -16,6 +16,7 @@ defmodule Eshop.Marketing.Schemas.PricingRule do
   alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.DiscountPercentageStrategy
   alias Eshop.Marketing.Schemas.PricingRule
+  alias Eshop.Marketing.Schemas.PricingRuleProduct
   alias Eshop.Products.Schemas.Product
 
   @type t :: %PricingRule{}
@@ -35,7 +36,7 @@ defmodule Eshop.Marketing.Schemas.PricingRule do
       on_replace: :update
     )
 
-    many_to_many :products, Product, join_through: "pricing_rules_products"
+    many_to_many :products, Product, join_through: PricingRuleProduct
 
     timestamps(type: :utc_datetime_usec)
   end
