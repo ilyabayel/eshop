@@ -1,4 +1,4 @@
-defmodule Eshop.CartAndCheckout.Schemas.CartProduct do
+defmodule Eshop.CartAndCheckout.Schemas.CartItem do
   @moduledoc false
 
   use Ecto.Schema
@@ -6,12 +6,12 @@ defmodule Eshop.CartAndCheckout.Schemas.CartProduct do
   import Ecto.Changeset
 
   alias Eshop.CartAndCheckout.Schemas.Cart
-  alias Eshop.CartAndCheckout.Schemas.CartProduct
+  alias Eshop.CartAndCheckout.Schemas.CartItem
   alias Eshop.Products.Schemas.Product
 
-  @type t :: %CartProduct{}
+  @type t :: %CartItem{}
 
-  schema "cart_products" do
+  schema "cart_items" do
     field :quantity, :integer
     belongs_to :product, Product
     belongs_to :cart, Cart
@@ -19,11 +19,11 @@ defmodule Eshop.CartAndCheckout.Schemas.CartProduct do
     timestamps()
   end
 
-  @spec changeset(CartProduct.t(), map()) :: Ecto.Changeset.t()
-  def changeset(cart_product, attrs) do
+  @spec changeset(CartItem.t(), map()) :: Ecto.Changeset.t()
+  def changeset(cart_item, attrs) do
     required_fields = [:quantity, :product_id, :cart_id]
 
-    cart_product
+    cart_item
     |> cast(attrs, required_fields)
     |> validate_required(required_fields)
   end

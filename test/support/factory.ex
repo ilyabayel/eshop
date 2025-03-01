@@ -5,7 +5,7 @@ defmodule Eshop.Factory do
 
   alias Eshop.Accounts.User
   alias Eshop.CartAndCheckout.Schemas.Cart
-  alias Eshop.CartAndCheckout.Schemas.CartProduct
+  alias Eshop.CartAndCheckout.Schemas.CartItem
   alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.PricingRule
   alias Eshop.Products.Schemas.Product
@@ -17,7 +17,7 @@ defmodule Eshop.Factory do
     }
   end
 
-  def market_product_factory do
+  def product_factory do
     %Product{
       title: sequence(:title, &"product-#{&1}"),
       description: sequence(:description, &"description of product-#{&1}"),
@@ -47,10 +47,10 @@ defmodule Eshop.Factory do
     }
   end
 
-  def cart_product_factory do
-    %CartProduct{
+  def cart_item_factory do
+    %CartItem{
       quantity: sequence(:quantity, &(1 + &1)),
-      product: build(:market_product),
+      product: build(:product),
       cart: build(:cart)
     }
   end

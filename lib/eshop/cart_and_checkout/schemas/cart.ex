@@ -11,13 +11,13 @@ defmodule Eshop.CartAndCheckout.Schemas.Cart do
 
   alias Eshop.Accounts.User
   alias Eshop.CartAndCheckout.Schemas.Cart
-  alias Eshop.Products.Schemas.Product
+  alias Eshop.CartAndCheckout.Schemas.CartItem
 
   @type t :: %Cart{}
 
   schema "carts" do
-    many_to_many :products, Product, join_through: "carts_products"
     belongs_to :user, User
+    has_many :items, CartItem
 
     timestamps(type: :utc_datetime_usec)
   end

@@ -18,7 +18,7 @@ defmodule Eshop.Repo.Migrations.InitShopTables do
       timestamps(type: :utc_datetime_usec)
     end
 
-    create table(:carts_products) do
+    create table(:cart_items) do
       add :cart_id, references(:carts), null: false
       add :product_id, references(:products), null: false
       add :quantity, :integer, default: 1, null: false
@@ -26,7 +26,7 @@ defmodule Eshop.Repo.Migrations.InitShopTables do
       timestamps(type: :utc_datetime_usec)
     end
 
-    create unique_index(:carts_products, [:cart_id, :product_id])
+    create unique_index(:cart_items, [:cart_id, :product_id])
 
     create table(:pricing_rules) do
       add :name, :string, null: false
