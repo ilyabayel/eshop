@@ -1,4 +1,4 @@
-defmodule Eshop.CartAndCheckout.Services.CalculateCartTotals do
+defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
   @moduledoc """
   """
   import Ecto.Query, only: [from: 2]
@@ -7,13 +7,16 @@ defmodule Eshop.CartAndCheckout.Services.CalculateCartTotals do
   alias Eshop.CartAndCheckout.Schemas.CartItem
   alias Eshop.CartAndCheckout.Services.ApplyStrategy
 
-  def call(%Cart{} = cart) do
-    items =
-      cart
-      |> get_cart_items()
-      |> apply_pricing_rules()
+  @spec call(cart_id :: integer) :: {:ok, map} | {:error, :not_found}
+  def call(cart_id) do
+    with {:ok, cart} <- Eshop.Repo.fetch(Cart, cart_id) do
+      items =
+        cart
+        |> get_cart_items()
+        |> apply_pricing_rules()
 
-    prepare_cart(cart, items, calculate_totals(items))
+      prepare_cart(cart, items, calculate_totals(items))
+    end
   end
 
   defp get_cart_items(cart) do
