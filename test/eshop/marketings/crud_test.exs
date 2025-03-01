@@ -40,11 +40,36 @@ defmodule Eshop.Marketing.CRUDTest do
         strategy: %{
           type: "discount_percentage",
           minimum_quantity: 2,
-          discount: 10
+          discount_percentage: 10
         }
       }
 
       assert {:ok, %PricingRule{}} = CRUD.create_pricing_rule(attrs)
+    end
+  end
+
+  describe "fetch_pricing_rule/1" do
+    test "should fetch pricing rule by id" do
+      %{id: id} = F.insert(:pricing_rule)
+
+      assert {:ok, %PricingRule{id: ^id}} = CRUD.fetch_pricing_rule(id)
+    end
+
+    test "should return error when not exist" do
+      assert {:error, :not_found} = CRUD.fetch_pricing_rule(1)
+    end
+  end
+
+  describe "delete_pricing_rule/1" do
+    test "should delete pricing rule by id" do
+      %{id: id} = F.insert(:pricing_rule)
+
+      assert {:ok, %PricingRule{id: ^id}} = CRUD.delete_pricing_rule(id)
+      assert {:error, :not_found} = CRUD.fetch_pricing_rule(id)
+    end
+
+    test "should return error when not exist" do
+      assert {:error, :not_found} = CRUD.delete_pricing_rule(1)
     end
   end
 end

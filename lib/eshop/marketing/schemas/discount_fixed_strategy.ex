@@ -6,6 +6,8 @@ defmodule Eshop.Marketing.Schemas.DiscountFixedStrategy do
 
   @required_fields [:type, :discount, :minimum_quantity]
 
+  @primary_key false
+
   embedded_schema do
     field :type, :string
     field :discount, Money.Ecto.Composite.Type
