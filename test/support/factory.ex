@@ -1,11 +1,12 @@
 defmodule Eshop.Factory do
   # with Ecto
   @moduledoc false
-  use ExMachina.Ecto, repo: Eshop.Repo
+  use Eshop.ExMachinaPolymorphicEmbed.Ecto, repo: Eshop.Repo
 
   alias Eshop.Accounts.User
   alias Eshop.CartAndCheckout.Schemas.Cart
   alias Eshop.CartAndCheckout.Schemas.CartProduct
+  alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.PricingRule
   alias Eshop.Products.Schemas.Product
 
@@ -36,9 +37,11 @@ defmodule Eshop.Factory do
     %PricingRule{
       name: sequence(:name, &"Pricing Rule #{&1}"),
       description: sequence(:description, &"Description for pricing rule #{&1}"),
-      strategy: %{
-        type: :discount_fixed,
-        minimum_quantity: 0,
+      # To support polymorphic embeds
+      # you need to pass struct a as parameter
+      strategy: %DiscountFixedStrategy{
+        type: "discount_fixed",
+        minimum_quantity: 1,
         discount: Money.new(10, :GBP)
       }
     }
