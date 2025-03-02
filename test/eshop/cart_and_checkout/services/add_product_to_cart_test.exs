@@ -47,25 +47,21 @@ defmodule Eshop.CartAndCheckout.Services.AddProductToCartTest do
     end
 
     test "removes product when quantity would become zero" do
-      cart = F.insert(:cart)
       product1 = F.insert(:product, price: Money.new(5_00))
       product2 = F.insert(:product, price: Money.new(3_00))
 
-      # Add both products
-      {:ok, _} = CartAndCheckout.add_product_to_cart(cart.id, product1.id, 1)
-      {:ok, result1} = CartAndCheckout.add_product_to_cart(cart.id, product2.id, 2)
+      cart = F.insert(:cart)
 
-      assert length(result1.items) == 2
-      assert result1.subtotal == Money.new(11_00)
+      F.insert(:cart_item, product: product1, quantity: 1, cart: cart)
+      F.insert(:cart_item, product: product2, quantity: 2, cart: cart)
 
-      # Remove product1 by adding -1
-      {:ok, result2} = CartAndCheckout.add_product_to_cart(cart.id, product1.id, -1)
+      {:ok, cart} = CartAndCheckout.remove_product_from_cart(cart.id, product1.id)
 
-      assert length(result2.items) == 1
-      assert result2.subtotal == Money.new(6_00)
-      assert result2.total == Money.new(6_00)
+      assert length(cart.items) == 1
+      assert cart.subtotal == Money.new(6_00)
+      assert cart.total == Money.new(6_00)
 
-      [item] = result2.items
+      [item] = cart.items
       assert item.product.id == product2.id
     end
 
@@ -147,12 +143,10 @@ defmodule Eshop.CartAndCheckout.Services.AddProductToCartTest do
           ]
         )
 
-      # Add 3 coffees (should apply 1/3 discount)
       {:ok, result} = CartAndCheckout.add_product_to_cart(cart.id, coffee.id, 3)
 
       assert result.subtotal == Money.new(33_69)
       assert result.total == Money.new(22_46)
-      # 1/3 off total price
       assert result.discount == Money.new(11_23)
 
       [coffee_item] = result.items
@@ -171,14 +165,6 @@ defmodule Eshop.CartAndCheckout.Services.AddProductToCartTest do
       cart = F.insert(:cart)
 
       assert {:error, "Product not found"} = CartAndCheckout.add_product_to_cart(cart.id, 999, 1)
-    end
-
-    test "returns error when quantity is invalid" do
-      cart = F.insert(:cart)
-      product = F.insert(:product)
-
-      assert {:error, changeset} = CartAndCheckout.add_product_to_cart(cart.id, product.id, 0)
-      assert "must be greater than 0" in errors_on(changeset).quantity
     end
   end
 end

@@ -46,12 +46,12 @@ defmodule EshopWeb.IndexLive do
   end
 
   def handle_event("add_item", %{"id" => product_id}, socket) do
-    {:ok, cart_with_prices} = CartAndCheckout.add_product_to_cart(socket.assigns.cart.id, product_id, 1)
+    {:ok, cart_with_prices} = CartAndCheckout.add_product_to_cart(socket.assigns.cart.id, product_id)
     {:noreply, assign(socket, cart: cart_with_prices)}
   end
 
   def handle_event("remove_item", %{"id" => product_id}, socket) do
-    {:ok, cart_with_prices} = CartAndCheckout.add_product_to_cart(socket.assigns.cart.id, product_id, -1)
+    {:ok, cart_with_prices} = CartAndCheckout.remove_product_from_cart(socket.assigns.cart.id, product_id)
     {:noreply, assign(socket, cart: cart_with_prices)}
   end
 
