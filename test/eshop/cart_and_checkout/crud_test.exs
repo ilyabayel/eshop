@@ -70,17 +70,17 @@ defmodule Eshop.CartAndCheckout.CRUDTest do
     end
   end
 
-  describe "fetch_by_session_key/1" do
+  describe "fetch_cart_by_session_key/1" do
     test "returns the cart when it exists with the given session key" do
       cart = F.insert(:cart, session_key: "unique_session_123")
 
-      assert {:ok, fetched_cart} = CRUD.fetch_by_session_key("unique_session_123")
+      assert {:ok, fetched_cart} = CRUD.fetch_cart_by_session_key("unique_session_123")
       assert fetched_cart.id == cart.id
       assert fetched_cart.session_key == "unique_session_123"
     end
 
     test "returns error when cart with session key does not exist" do
-      result = CRUD.fetch_by_session_key("nonexistent_key")
+      result = CRUD.fetch_cart_by_session_key("nonexistent_key")
       assert {:error, :not_found} = result
     end
   end

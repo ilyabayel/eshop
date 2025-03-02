@@ -104,7 +104,7 @@ products = [
 
 for product <- products do
   {:ok, %{id: product_id}} =
-    Products.CRUD.create_product(%{
+    Products.create_product(%{
       title: product.title,
       code: product.code,
       price: product.price,
@@ -115,7 +115,7 @@ for product <- products do
 
   for pricing_rule <- product.pricing_rules do
     {:ok, %{id: pricing_rule_id}} =
-      Marketing.CRUD.create_pricing_rule(%{
+      Marketing.create_pricing_rule(%{
         name: pricing_rule.name,
         description: "any",
         strategy: pricing_rule.strategy

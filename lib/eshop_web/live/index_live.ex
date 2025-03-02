@@ -10,7 +10,6 @@ defmodule EshopWeb.IndexLive do
   import EshopWeb.Components.ProductCard
 
   alias Eshop.CartAndCheckout
-  alias Eshop.CartAndCheckout.CRUD
 
   def render(assigns) do
     ~H"""
@@ -57,8 +56,8 @@ defmodule EshopWeb.IndexLive do
 
   defp get_or_create_cart(session_key) do
     {:ok, cart} =
-      case Eshop.CartAndCheckout.CRUD.fetch_by_session_key(session_key) do
-        {:error, _} -> CRUD.create_cart(%{session_key: session_key})
+      case Eshop.CartAndCheckout.fetch_cart_by_session_key(session_key) do
+        {:error, _} -> CartAndCheckout.create_cart(%{session_key: session_key})
         {:ok, _} = result -> result
       end
 
