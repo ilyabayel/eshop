@@ -1,4 +1,4 @@
-defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
+defmodule Eshop.CartAndCheckout.Services.FetchCartWithPrices do
   @moduledoc """
   """
   import Ecto.Query, only: [from: 2]
@@ -41,7 +41,7 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
   defp apply_pricing_rules(items) do
     for item <- items do
       subtotal = Money.multiply(item.product.price, item.quantity)
-      total = calculate_item_total_and_subtotal(item, subtotal)
+      total = calculate_item_total(item, subtotal)
 
       %CartItemWithPrices{
         id: item.id,
@@ -53,21 +53,16 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
     end
   end
 
-  defp calculate_item_total_and_subtotal(item, subtotal) do
-    {total, _} =
-      Enum.reduce(item.product.pricing_rules, {subtotal, item}, fn pricing_rule, {total, item} ->
-        total = ApplyStrategy.call(pricing_rule.strategy, item, total)
-
-        {total, item}
-      end)
-
-    total
+  defp calculate_item_total(item, subtotal) do
+    Enum.reduce(item.product.pricing_rules, subtotal, fn pricing_rule, subtotal ->
+      ApplyStrategy.call(pricing_rule.strategy, item, subtotal)
+    end)
   end
 
   defp calcualte_cart_total_and_subtotal(items) do
-    acc = %{subtotal: Money.new(0), total: Money.new(0)}
+    default_acc = %{subtotal: Money.new(0), total: Money.new(0)}
 
-    Enum.reduce(items, acc, fn item, acc ->
+    Enum.reduce(items, default_acc, fn item, acc ->
       %{subtotal: Money.add(acc.subtotal, item.subtotal), total: Money.add(acc.total, item.total)}
     end)
   end

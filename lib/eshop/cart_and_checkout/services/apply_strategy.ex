@@ -4,32 +4,32 @@ defmodule Eshop.CartAndCheckout.Services.ApplyStrategy do
   alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.DiscountPercentageStrategy
 
-  def call(strategy, item, total) do
-    apply_strategy(strategy, item, total)
+  def call(strategy, item, subtotal) do
+    apply_strategy(strategy, item, subtotal)
   end
 
-  defp apply_strategy(%DiscountFixedStrategy{} = strategy, item, total) do
+  defp apply_strategy(%DiscountFixedStrategy{} = strategy, item, subtotal) do
     if item.quantity >= strategy.minimum_quantity do
       total_discount = Money.multiply(strategy.discount, item.quantity)
-      Money.subtract(total, total_discount)
+      Money.subtract(subtotal, total_discount)
     else
-      total
+      subtotal
     end
   end
 
-  defp apply_strategy(%DiscountPercentageStrategy{} = strategy, item, total) do
+  defp apply_strategy(%DiscountPercentageStrategy{} = strategy, item, subtotal) do
     if item.quantity >= strategy.minimum_quantity do
-      discount = Money.multiply(total, Decimal.div(strategy.discount_percentage, 100))
+      discount = Money.multiply(subtotal, Decimal.div(strategy.discount_percentage, 100))
 
-      Money.subtract(total, discount)
+      Money.subtract(subtotal, discount)
     else
-      total
+      subtotal
     end
   end
 
-  defp apply_strategy(%BuyXGetYStrategy{} = strategy, item, total) do
+  defp apply_strategy(%BuyXGetYStrategy{} = strategy, item, subtotal) do
     get_for_free = div(item.quantity, strategy.buy_quantity + strategy.get_quantity)
 
-    Money.subtract(total, Money.multiply(item.product.price, get_for_free))
+    Money.subtract(subtotal, Money.multiply(item.product.price, get_for_free))
   end
 end

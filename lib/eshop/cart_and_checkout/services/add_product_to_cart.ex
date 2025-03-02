@@ -4,7 +4,7 @@ defmodule Eshop.CartAndCheckout.Services.AddProductToCart do
   But I don't have enough time for it, I need work to be done.
   """
   alias Eshop.CartAndCheckout
-  alias Eshop.CartAndCheckout.Services.GetCartWithPrices
+  alias Eshop.CartAndCheckout.Services.FetchCartWithPrices
   alias Eshop.CartAndCheckout.Structs.CartWithPrices
   alias Eshop.Products
 
@@ -13,7 +13,7 @@ defmodule Eshop.CartAndCheckout.Services.AddProductToCart do
     with {:ok, cart} <- CartAndCheckout.CRUD.fetch_cart(cart_id),
          {:ok, _} <- Products.CRUD.fetch_product(product_id),
          {:ok, _} <- upsert_or_delete_cart_item(cart_id, product_id, quantity) do
-      GetCartWithPrices.call(cart)
+      FetchCartWithPrices.call(cart)
     end
   end
 

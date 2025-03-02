@@ -1,4 +1,4 @@
-defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
+defmodule Eshop.CartAndCheckout.Services.FetchCartWithPricesTest do
   use Eshop.DataCase, async: true
 
   alias Eshop.CartAndCheckout
