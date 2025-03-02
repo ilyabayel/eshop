@@ -24,10 +24,7 @@ products = [
     price: Money.new(3_11),
     stock: 100,
     pricing_rules: [
-      %{
-        name: "Discount 33%",
-        strategy: %{type: "discount_percentage", minimum_quantity: 3, discount_percentage: Decimal.div(1 * 100, 3)}
-      }
+      %{name: "Special offer: 1+1", strategy: %{type: "buy_x_get_y", buy_quantity: 1, get_quantity: 1}}
     ]
   },
   %{
@@ -38,7 +35,10 @@ products = [
     price: Money.new(5_00),
     stock: 100,
     pricing_rules: [
-      %{name: "Buy for £4.50", strategy: %{type: "discount_fixed", minimum_quantity: 3, discount: Money.new(0_50)}}
+      %{
+        name: "£4.50 per item if buy 3+",
+        strategy: %{type: "discount_fixed", minimum_quantity: 3, discount: Money.new(0_50)}
+      }
     ]
   },
   %{
@@ -49,7 +49,10 @@ products = [
     price: Money.new(11_23),
     stock: 100,
     pricing_rules: [
-      %{name: "Special offer: 1+1", strategy: %{type: "buy_x_get_y", buy_quantity: 1, get_quantity: 1}}
+      %{
+        name: "Discount 33% if buy 3+",
+        strategy: %{type: "discount_percentage", minimum_quantity: 3, discount_percentage: Decimal.div(1 * 100, 3)}
+      }
     ]
   },
   %{
@@ -101,7 +104,7 @@ products = [
 
 for product <- products do
   {:ok, %{id: product_id}} =
-    Products.CRUD.create(%{
+    Products.CRUD.create_product(%{
       title: product.title,
       code: product.code,
       price: product.price,
