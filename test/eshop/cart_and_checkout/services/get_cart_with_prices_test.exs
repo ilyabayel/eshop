@@ -1,7 +1,7 @@
 defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
   use Eshop.DataCase, async: true
 
-  alias Eshop.CartAndCheckout.Services.GetCartWithPrices
+  alias Eshop.CartAndCheckout
   alias Eshop.Marketing.Schemas.BuyXGetYStrategy
   alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.DiscountPercentageStrategy
@@ -19,7 +19,7 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
                 items: items,
                 subtotal: %Money{amount: 17_00, currency: :GBP},
                 total: %Money{amount: 17_00, currency: :GBP}
-              }} = GetCartWithPrices.call(cart)
+              }} = CartAndCheckout.get_cart_with_prices(cart)
 
       assert %{subtotal: %Money{amount: 6_00, currency: :GBP}, total: %Money{amount: 6_00, currency: :GBP}} =
                Enum.find(items, &(&1.id == item_1.id))
@@ -40,7 +40,7 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
                 items: items,
                 subtotal: %Money{amount: 25_56, currency: :GBP},
                 total: %Money{amount: 22_45, currency: :GBP}
-              }} = GetCartWithPrices.call(cart)
+              }} = CartAndCheckout.get_cart_with_prices(cart)
 
       assert %{subtotal: %Money{amount: 9_33, currency: :GBP}, total: %Money{amount: 6_22, currency: :GBP}} =
                Enum.find(items, &(&1.id == items_map.green_tea.id))
@@ -61,7 +61,7 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
                 items: items,
                 subtotal: %Money{amount: 6_22, currency: :GBP},
                 total: %Money{amount: 3_11, currency: :GBP}
-              }} = GetCartWithPrices.call(cart)
+              }} = CartAndCheckout.get_cart_with_prices(cart)
 
       assert %{subtotal: %Money{amount: 6_22, currency: :GBP}, total: %Money{amount: 3_11, currency: :GBP}} =
                Enum.find(items, &(&1.id == items_map.green_tea.id))
@@ -76,7 +76,7 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
                 items: items,
                 subtotal: %Money{amount: 18_11, currency: :GBP},
                 total: %Money{amount: 16_61, currency: :GBP}
-              }} = GetCartWithPrices.call(cart)
+              }} = CartAndCheckout.get_cart_with_prices(cart)
 
       assert %{subtotal: %Money{amount: 3_11, currency: :GBP}, total: %Money{amount: 3_11, currency: :GBP}} =
                Enum.find(items, &(&1.id == items_map.green_tea.id))
@@ -94,7 +94,7 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPricesTest do
                 items: items,
                 subtotal: %Money{amount: 41_80, currency: :GBP},
                 total: %Money{amount: 30_57, currency: :GBP}
-              }} = GetCartWithPrices.call(cart)
+              }} = CartAndCheckout.get_cart_with_prices(cart)
 
       assert %{subtotal: %Money{amount: 3_11, currency: :GBP}, total: %Money{amount: 3_11, currency: :GBP}} =
                Enum.find(items, &(&1.id == items_map.green_tea.id))
