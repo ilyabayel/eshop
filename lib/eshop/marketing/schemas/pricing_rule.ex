@@ -1,11 +1,6 @@
 defmodule Eshop.Marketing.Schemas.PricingRule do
   @moduledoc """
   Pricing rule schema.
-
-  Strategy options:
-    - :buy_x_get_y_for_free - where x is quantity you need to buy and y is quantity you get for free
-    - :discount_fixed - where x is lower limit you need to buy and y is price per product
-    - :discount_percentage - where x is quantity you need to buy and y is discount in percents
   """
   use Ecto.Schema
 
