@@ -11,6 +11,7 @@ defmodule Eshop.CartAndCheckout.Services.ApplyStrategy do
   defp apply_strategy(%DiscountFixedStrategy{} = strategy, item, subtotal) do
     if item.quantity >= strategy.minimum_quantity do
       total_discount = Money.multiply(strategy.discount, item.quantity)
+
       Money.subtract(subtotal, total_discount)
     else
       subtotal
