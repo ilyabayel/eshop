@@ -40,14 +40,7 @@ defmodule EshopWeb.Router do
   scope "/", EshopWeb do
     pipe_through [:browser]
 
-    live_session :default do
-      live "/", IndexLive
-
-      live "/products", IndexLive
-      live "/products/:id", ShowLive
-
-      live "/checkout", Checkout.IndexLive
-    end
+    live "/", IndexLive
   end
 
   defp fetch_session_key(conn, _opts) do

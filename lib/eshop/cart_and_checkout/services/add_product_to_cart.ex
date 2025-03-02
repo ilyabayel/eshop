@@ -1,5 +1,8 @@
 defmodule Eshop.CartAndCheckout.Services.AddProductToCart do
-  @moduledoc false
+  @moduledoc """
+  Actually I don't like name of this module, and I would like to change it to something more descriptive.
+  But I don't have enough time for it, I need work to be done.
+  """
   alias Eshop.CartAndCheckout
   alias Eshop.CartAndCheckout.Services.GetCartWithPrices
   alias Eshop.CartAndCheckout.Structs.CartWithPrices
