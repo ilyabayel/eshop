@@ -6,8 +6,10 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
   alias Eshop.CartAndCheckout.Schemas.Cart
   alias Eshop.CartAndCheckout.Schemas.CartItem
   alias Eshop.CartAndCheckout.Services.ApplyStrategy
+  alias Eshop.CartAndCheckout.Structs.CartItemWithPrices
+  alias Eshop.CartAndCheckout.Structs.CartWithPrices
 
-  @spec call(cart_id :: integer) :: {:ok, map} | {:error, :not_found}
+  @spec call(cart_id :: integer) :: {:ok, CartWithPrices.t()} | {:error, :not_found}
   def call(cart_id) do
     with {:ok, cart} <- Eshop.Repo.fetch(Cart, cart_id) do
       items =
@@ -15,7 +17,9 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
         |> get_cart_items()
         |> apply_pricing_rules()
 
-      prepare_cart(cart, items, calculate_totals(items))
+      %{subtotal: subtotal, total: total} = calcualte_cart_total_and_subtotal(items)
+
+      {:ok, %CartWithPrices{id: cart.id, items: items, subtotal: subtotal, total: total}}
     end
   end
 
@@ -32,15 +36,19 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
   defp apply_pricing_rules(items) do
     for item <- items do
       subtotal = Money.multiply(item.product.price, item.quantity)
-      total = calculate_total_for_item(item, subtotal)
+      total = calculate_item_total_and_subtotal(item, subtotal)
 
-      item
-      |> Map.put(:total, total)
-      |> Map.put(:subtotal, subtotal)
+      %CartItemWithPrices{
+        id: item.id,
+        product: item.product,
+        quantity: item.quantity,
+        subtotal: subtotal,
+        total: total
+      }
     end
   end
 
-  defp calculate_total_for_item(item, subtotal) do
+  defp calculate_item_total_and_subtotal(item, subtotal) do
     {total, _} =
       Enum.reduce(item.product.pricing_rules, {subtotal, item}, fn pricing_rule, {total, item} ->
         total = ApplyStrategy.call(pricing_rule.strategy, item, total)
@@ -51,16 +59,11 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
     total
   end
 
-  defp calculate_totals(items) do
+  defp calcualte_cart_total_and_subtotal(items) do
     acc = %{subtotal: Money.new(0), total: Money.new(0)}
 
     Enum.reduce(items, acc, fn item, acc ->
-      %{subtotal: subtotal, total: total} = acc
-      %{subtotal: Money.add(subtotal, item.subtotal), total: Money.add(total, item.total)}
+      %{subtotal: Money.add(acc.subtotal, item.subtotal), total: Money.add(acc.total, item.total)}
     end)
-  end
-
-  defp prepare_cart(cart, items, %{subtotal: subtotal, total: total}) do
-    {:ok, %{id: cart.id, items: items, subtotal: subtotal, total: total}}
   end
 end
