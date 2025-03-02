@@ -8,19 +8,26 @@ defmodule Eshop.CartAndCheckout.Services.GetCartWithPrices do
   alias Eshop.CartAndCheckout.Services.ApplyStrategy
   alias Eshop.CartAndCheckout.Structs.CartItemWithPrices
   alias Eshop.CartAndCheckout.Structs.CartWithPrices
+  alias Eshop.Repo
 
-  @spec call(cart_id :: integer) :: {:ok, CartWithPrices.t()} | {:error, :not_found}
-  def call(cart_id) do
-    with {:ok, cart} <- Eshop.Repo.fetch(Cart, cart_id) do
-      items =
-        cart
-        |> get_cart_items()
-        |> apply_pricing_rules()
+  @spec call(cart :: Cart.t()) :: {:ok, CartWithPrices.t()}
+  def call(cart) do
+    items =
+      cart
+      |> Repo.preload(:pricing_rules)
+      |> get_cart_items()
+      |> apply_pricing_rules()
 
-      %{subtotal: subtotal, total: total} = calcualte_cart_total_and_subtotal(items)
+    %{subtotal: subtotal, total: total} = calcualte_cart_total_and_subtotal(items)
 
-      {:ok, %CartWithPrices{id: cart.id, items: items, subtotal: subtotal, total: total}}
-    end
+    {:ok,
+     %CartWithPrices{
+       id: cart.id,
+       items: items,
+       subtotal: subtotal,
+       total: total,
+       discount: Money.subtract(subtotal, total)
+     }}
   end
 
   defp get_cart_items(cart) do

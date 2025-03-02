@@ -2,9 +2,7 @@ defmodule EshopWeb.Components.Cart do
   @moduledoc false
   use EshopWeb, :component
 
-  attr :show_cart, :boolean, default: false
-  attr :cart_items, :list, default: []
-  attr :cart_summary, :map, required: true
+  attr :cart, :map, required: true
 
   def cart(assigns) do
     ~H"""
@@ -19,7 +17,7 @@ defmodule EshopWeb.Components.Cart do
 
         <div class="flex-1 overflow-y-auto p-4 max-h-[500px]">
           <div
-            :if={Enum.empty?(@cart_items)}
+            :if={Enum.empty?(@cart.items)}
             class="flex flex-col items-center justify-center h-full text-muted-foreground"
           >
             <.icon name="hero-shopping-cart" class="h-12 w-12 mb-4" />
@@ -27,7 +25,7 @@ defmodule EshopWeb.Components.Cart do
           </div>
           <div class="space-y-4">
             <div
-              :for={item <- @cart_items}
+              :for={item <- @cart.items}
               class="flex items-start space-x-4 py-4 border-b last:border-none"
             >
               <img src={item.image_url} alt={item.title} class="h-20 w-20 object-cover rounded-md" />
@@ -77,20 +75,20 @@ defmodule EshopWeb.Components.Cart do
           <div class="space-y-2">
             <div class="flex justify-between text-sm">
               <span class="text-muted-foreground">Subtotal</span>
-              <span>{@cart_summary.currency_label}{@cart_summary.subtotal}</span>
+              <span>{Money.to_string(@cart.subtotal)}</span>
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-muted-foreground">Discounts</span>
               <span class="text-destructive">
-                -{@cart_summary.currency_label}{@cart_summary.discount}
+                -{Money.to_string(@cart.discount)}
               </span>
             </div>
             <div class="flex justify-between font-medium">
               <span>Total</span>
-              <span>{@cart_summary.currency_label}{@cart_summary.total}</span>
+              <span>{Money.to_string(@cart.total)}</span>
             </div>
           </div>
-          <.button class="w-full" disabled={Enum.empty?(@cart_items)}>
+          <.button class="w-full" disabled={Enum.empty?(@cart.items)}>
             Checkout
           </.button>
         </div>

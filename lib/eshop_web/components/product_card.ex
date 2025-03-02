@@ -18,18 +18,18 @@ defmodule EshopWeb.Components.ProductCard do
         <.card_title>{@product.title}</.card_title>
       </.card_header>
       <.card_content>
-        <p :for={offer <- @product.special_offers} class="text-red-500">
-          {offer.label}
+        <p :for={rule <- @product.pricing_rules} class="text-red-500">
+          {rule.name}
         </p>
       </.card_content>
       <.card_footer>
         <p class="text-lg font-semibold text-foreground">
-          {@product.price.currency_label}{@product.price.value}
+          {Money.to_string(@product.price)}
         </p>
-        <.button :if={not @product.out_of_stock}>
+        <.button :if={@product.stock != 0} phx-click="add_to_cart" phx-value-id={@product.id}>
           Add to cart <Lucide.plus class="h-5 w-5 ml-2" />
         </.button>
-        <.button :if={@product.out_of_stock} variant="outline" disabled>
+        <.button :if={@product.stock == 0} variant="outline" disabled>
           Out of stock
         </.button>
       </.card_footer>

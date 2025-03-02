@@ -7,5 +7,6 @@ defmodule Eshop.CartAndCheckout.Structs.CartWithPrices do
     field :items, list(Eshop.CartAndCheckout.Structs.CartItemWithPrices.t())
     field :subtotal, Money.t()
     field :total, Money.t()
+    field :discount, Money.t()
   end
 end

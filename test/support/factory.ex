@@ -3,19 +3,11 @@ defmodule Eshop.Factory do
   @moduledoc false
   use Eshop.ExMachinaPolymorphicEmbed.Ecto, repo: Eshop.Repo
 
-  alias Eshop.Accounts.User
   alias Eshop.CartAndCheckout.Schemas.Cart
   alias Eshop.CartAndCheckout.Schemas.CartItem
   alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.PricingRule
   alias Eshop.Products.Schemas.Product
-
-  def user_factory do
-    %User{
-      email: sequence(:email, &"email-#{&1}@example.com"),
-      hashed_password: "hashed_password"
-    }
-  end
 
   def product_factory do
     %Product{
@@ -30,7 +22,7 @@ defmodule Eshop.Factory do
 
   def cart_factory do
     %Cart{
-      user: build(:user)
+      session_key: "session_key"
     }
   end
 

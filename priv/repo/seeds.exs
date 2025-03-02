@@ -15,8 +15,6 @@ alias Eshop.Marketing.Schemas.PricingRuleProduct
 alias Eshop.Products
 alias Eshop.Repo
 
-{:ok, _} = Eshop.Accounts.register_user(%{email: "admin@eshop.com", password: "qwertyqwerty"})
-
 products = [
   %{
     title: "Green tea",
@@ -26,7 +24,10 @@ products = [
     price: Money.new(3_11),
     stock: 100,
     pricing_rules: [
-      %{strategy: %{type: "discount_percentage", minimum_quantity: 3, discount_percentage: Decimal.div(33 * 100, 100)}}
+      %{
+        name: "Discount 33%",
+        strategy: %{type: "discount_percentage", minimum_quantity: 3, discount_percentage: Decimal.div(1 * 100, 3)}
+      }
     ]
   },
   %{
@@ -37,7 +38,7 @@ products = [
     price: Money.new(5_00),
     stock: 100,
     pricing_rules: [
-      %{strategy: %{type: "discount_fixed", minimum_quantity: 3, discount: Money.new(0_50)}}
+      %{name: "Buy for £4.50", strategy: %{type: "discount_fixed", minimum_quantity: 3, discount: Money.new(0_50)}}
     ]
   },
   %{
@@ -48,7 +49,7 @@ products = [
     price: Money.new(11_23),
     stock: 100,
     pricing_rules: [
-      %{strategy: %{type: "buy_x_get_y", buy_quantity: 1, get_quantity: 1}}
+      %{name: "Special offer: 1+1", strategy: %{type: "buy_x_get_y", buy_quantity: 1, get_quantity: 1}}
     ]
   },
   %{
@@ -112,7 +113,7 @@ for product <- products do
   for pricing_rule <- product.pricing_rules do
     {:ok, %{id: pricing_rule_id}} =
       Marketing.CRUD.create_pricing_rule(%{
-        name: "any",
+        name: pricing_rule.name,
         description: "any",
         strategy: pricing_rule.strategy
       })

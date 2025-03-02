@@ -1,6 +1,8 @@
 defmodule Eshop.Products.CRUD do
   @moduledoc false
 
+  import Ecto.Query, only: [from: 2]
+
   alias Eshop.Products.Schemas.Product
   alias Eshop.Repo
 
@@ -8,6 +10,14 @@ defmodule Eshop.Products.CRUD do
     %Product{}
     |> Product.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def fetch(id) do
+    Repo.fetch(Product, id)
+  end
+
+  def list do
+    Repo.all(from(p in Product, preload: :pricing_rules))
   end
 
   def update(product, attrs) do

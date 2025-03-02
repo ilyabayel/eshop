@@ -40,11 +40,11 @@ defmodule Eshop.Marketing.CRUDTest do
         strategy: %{
           type: "discount_percentage",
           minimum_quantity: 2,
-          discount_percentage: 10
+          discount_percentage: Decimal.new("66.6666666666666667")
         }
       }
 
-      assert {:ok, %PricingRule{}} = CRUD.create_pricing_rule(attrs)
+      assert {:ok, %PricingRule{} = rule} = CRUD.create_pricing_rule(attrs)
     end
   end
 
