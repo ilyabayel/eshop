@@ -14,6 +14,7 @@ defmodule Eshop.Products.Schemas.Product do
   schema "products" do
     field :title, :string
     field :description, :string
+    field :code, :string
     field :image_url, :string
     field :price, Money.Ecto.Composite.Type
     field :stock, :integer
@@ -25,7 +26,7 @@ defmodule Eshop.Products.Schemas.Product do
 
   @spec changeset(Product.t(), map()) :: Ecto.Changeset.t()
   def changeset(product, attrs) do
-    required_fields = [:title, :image_url, :price, :stock]
+    required_fields = [:title, :code, :image_url, :price, :stock]
     optional_fields = [:description]
 
     product

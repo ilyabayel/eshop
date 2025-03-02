@@ -5,6 +5,7 @@ defmodule Eshop.Repo.Migrations.InitShopTables do
     create table(:products) do
       add :title, :string, null: false
       add :description, :text
+      add :code, :string, null: false
       add :image_url, :string
       add :price, :money_with_currency
       add :stock, :integer, default: 0
