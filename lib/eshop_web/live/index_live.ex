@@ -9,7 +9,8 @@ defmodule EshopWeb.IndexLive do
   import EshopWeb.Components.Navbar
   import EshopWeb.Components.ProductCard
 
-  alias Eshop.Products
+  alias Eshop.CartAndCheckout
+  alias Eshop.CartAndCheckout.CRUD
 
   def render(assigns) do
     ~H"""
@@ -17,7 +18,7 @@ defmodule EshopWeb.IndexLive do
       <.navbar />
       <main class="container mx-auto px-4 py-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-x-8">
-          <div class="lg:col-span-7 xl:col-span-8">
+          <div class="lg:col-span-7 xl:col-span-8 mb-6">
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
               <.product_card :for={product <- @products} product={product} />
             </div>
@@ -31,23 +32,36 @@ defmodule EshopWeb.IndexLive do
     """
   end
 
-  def mount(_params, _session, socket) do
-    products = Eshop.Products.list()
+  def mount(_params, %{"session_key" => session_key}, socket) do
+    products = Eshop.Products.list_products()
+    cart = get_or_create_cart(session_key)
+
+    {:ok, cart_with_prices} = CartAndCheckout.get_cart_with_prices(cart)
 
     {:ok,
      assign(socket,
        products: products,
-       cart: %{
-         items: [],
-         total: Money.new(0),
-         subtotal: Money.new(0),
-         discount: Money.new(0)
-       }
+       cart: cart_with_prices
      )}
   end
 
-  def handle_event("add_to_cart", %{"id" => id}, socket) do
-    {:ok, product} = Products.CRUD.fetch(id)
-    {:noreply, put_flash(socket, :info, "#{product.title} added to cart")}
+  def handle_event("add_item", %{"id" => product_id}, socket) do
+    {:ok, cart_with_prices} = CartAndCheckout.add_product_to_cart(socket.assigns.cart.id, product_id, 1)
+    {:noreply, assign(socket, cart: cart_with_prices)}
+  end
+
+  def handle_event("remove_item", %{"id" => product_id}, socket) do
+    {:ok, cart_with_prices} = CartAndCheckout.add_product_to_cart(socket.assigns.cart.id, product_id, -1)
+    {:noreply, assign(socket, cart: cart_with_prices)}
+  end
+
+  defp get_or_create_cart(session_key) do
+    {:ok, cart} =
+      case Eshop.CartAndCheckout.CRUD.fetch_by_session_key(session_key) do
+        {:error, _} -> CRUD.create_cart(%{session_key: session_key})
+        {:ok, _} = result -> result
+      end
+
+    cart
   end
 end

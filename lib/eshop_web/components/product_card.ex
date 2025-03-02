@@ -26,7 +26,7 @@ defmodule EshopWeb.Components.ProductCard do
         <p class="text-lg font-semibold text-foreground">
           {Money.to_string(@product.price)}
         </p>
-        <.button :if={@product.stock != 0} phx-click="add_to_cart" phx-value-id={@product.id}>
+        <.button :if={@product.stock != 0} phx-click="add_item" phx-value-id={@product.id}>
           Add to cart <Lucide.plus class="h-5 w-5 ml-2" />
         </.button>
         <.button :if={@product.stock == 0} variant="outline" disabled>

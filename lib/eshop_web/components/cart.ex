@@ -28,41 +28,42 @@ defmodule EshopWeb.Components.Cart do
               :for={item <- @cart.items}
               class="flex items-start space-x-4 py-4 border-b last:border-none"
             >
-              <img src={item.image_url} alt={item.title} class="h-20 w-20 object-cover rounded-md" />
+              <img
+                src={item.product.image_url}
+                alt={item.product.title}
+                class="h-20 w-20 object-cover rounded-md"
+              />
               <div class="flex-1">
-                <h3 class="font-medium">{item.title}</h3>
+                <h3 class="font-medium">{item.product.title}</h3>
                 <p class="text-sm text-muted-foreground">
-                  {item.price.currency_label}{item.price.value} × {item.quantity}
+                  {Money.to_string(item.product.price)} × {item.quantity}
                 </p>
-                <span :for={discount <- item.applied_discounts} class="text-sm text-destructive">
-                  {discount.label}
-                </span>
               </div>
               <div class="flex flex-col items-end space-y-2">
                 <p>
                   <span
-                    :if={not Enum.empty?(item.applied_discounts)}
+                    :if={not Money.equals?(item.subtotal, item.total)}
                     class="text-muted-foreground line-through text-sm mr-1"
                   >
-                    {item.price.currency_label}{item.total_without_discounts}
+                    {Money.to_string(item.subtotal)}
                   </span>
                   <span class="font-medium">
-                    {item.price.currency_label}{item.total_with_discounts}
+                    {Money.to_string(item.total)}
                   </span>
                 </p>
                 <div class="flex items-center text-sm">
                   <button
                     class="w-6 h-6 hover:bg-accent rounded-full flex items-center justify-center"
-                    phx-click="decrease_quantity"
-                    phx-value-id={item.id}
+                    phx-click="remove_item"
+                    phx-value-id={item.product.id}
                   >
                     <.icon name="hero-minus-small" class="h-5 w-5" />
                   </button>
                   <span class="w-8 text-center">{item.quantity}</span>
                   <button
                     class="w-6 h-6 hover:bg-accent rounded-full flex items-center justify-center"
-                    phx-click="increase_quantity"
-                    phx-value-id={item.id}
+                    phx-click="add_item"
+                    phx-value-id={item.product.id}
                   >
                     <.icon name="hero-plus-small" class="h-5 w-5" />
                   </button>
