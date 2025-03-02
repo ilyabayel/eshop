@@ -1,9 +1,13 @@
 defmodule Eshop.CartAndCheckout.Services.ApplyStrategy do
   @moduledoc false
+  alias Eshop.CartAndCheckout.Schemas.CartItem
   alias Eshop.Marketing.Schemas.BuyXGetYStrategy
   alias Eshop.Marketing.Schemas.DiscountFixedStrategy
   alias Eshop.Marketing.Schemas.DiscountPercentageStrategy
 
+  @type supported_strategies :: BuyXGetYStrategy.t() | DiscountFixedStrategy.t() | DiscountPercentageStrategy.t()
+
+  @spec call(supported_strategies(), CartItem.t(), Money.t()) :: Money.t()
   def call(strategy, item, subtotal) do
     apply_strategy(strategy, item, subtotal)
   end

@@ -4,7 +4,7 @@ defmodule Eshop.Marketing.Schemas.DiscountFixedStrategy do
 
   import Ecto.Changeset
 
-  @required_fields [:type, :discount, :minimum_quantity]
+  @type t :: %__MODULE__{}
 
   @primary_key false
 
@@ -15,9 +15,11 @@ defmodule Eshop.Marketing.Schemas.DiscountFixedStrategy do
   end
 
   def changeset(strategy, attrs) do
+    required_fields = [:type, :discount, :minimum_quantity]
+
     strategy
-    |> cast(attrs, @required_fields)
-    |> validate_required(@required_fields)
+    |> cast(attrs, required_fields)
+    |> validate_required(required_fields)
     |> validate_number(:minimum_quantity, greater_than: 0)
   end
 end

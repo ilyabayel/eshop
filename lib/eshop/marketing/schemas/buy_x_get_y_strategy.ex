@@ -4,7 +4,7 @@ defmodule Eshop.Marketing.Schemas.BuyXGetYStrategy do
 
   import Ecto.Changeset
 
-  @required_fields [:type, :buy_quantity, :get_quantity]
+  @type t :: %__MODULE__{}
 
   @primary_key false
 
@@ -15,9 +15,11 @@ defmodule Eshop.Marketing.Schemas.BuyXGetYStrategy do
   end
 
   def changeset(strategy, attrs) do
+    required_fields = [:type, :buy_quantity, :get_quantity]
+
     strategy
-    |> cast(attrs, @required_fields)
-    |> validate_required(@required_fields)
+    |> cast(attrs, required_fields)
+    |> validate_required(required_fields)
     |> validate_number(:buy_quantity, greater_than: 0)
     |> validate_number(:get_quantity, greater_than: 0)
   end
