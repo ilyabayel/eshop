@@ -8,7 +8,7 @@ defmodule Eshop.CartAndCheckout.Services.AddProductToCart do
   @spec call(integer(), integer(), integer()) :: {:ok, CartWithPrices.t()} | {:error, Ecto.Changeset.t() | :not_found}
   def call(cart_id, product_id, quantity) do
     with {:ok, cart} <- CartAndCheckout.CRUD.fetch_cart(cart_id),
-         {:ok, _} <- Products.CRUD.fetch(product_id),
+         {:ok, _} <- Products.CRUD.fetch_product(product_id),
          {:ok, _} <- upsert_or_delete_cart_item(cart_id, product_id, quantity) do
       GetCartWithPrices.call(cart)
     end

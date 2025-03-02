@@ -5,8 +5,9 @@ defmodule Eshop.Products do
 
   alias Eshop.Products.CRUD
 
-  defdelegate list, to: CRUD
-  defdelegate create(attrs), to: CRUD
-  defdelegate update(product, attrs), to: CRUD
-  defdelegate delete(id), to: CRUD
+  defdelegate fetch_product(id), to: CRUD
+  defdelegate list_products, to: CRUD
+  defdelegate create_product(attrs), to: CRUD
+  defdelegate update_product(product, attrs), to: CRUD
+  defdelegate delete_product(id), to: CRUD
 end

@@ -45,6 +45,17 @@ defmodule Eshop.Marketing.CRUDTest do
       }
 
       assert {:ok, %PricingRule{} = rule} = CRUD.create_pricing_rule(attrs)
+
+      assert %{
+               id: _,
+               name: "test",
+               description: "test description",
+               strategy: %{
+                 type: "discount_percentage",
+                 discount_percentage: %Decimal{},
+                 minimum_quantity: 2
+               }
+             } = rule
     end
   end
 

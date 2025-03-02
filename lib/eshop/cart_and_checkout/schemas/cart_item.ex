@@ -26,5 +26,6 @@ defmodule Eshop.CartAndCheckout.Schemas.CartItem do
     cart_item
     |> cast(attrs, required_fields)
     |> validate_required(required_fields)
+    |> validate_number(:quantity, greater_than: 0)
   end
 end

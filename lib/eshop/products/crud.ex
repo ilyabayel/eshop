@@ -6,30 +6,33 @@ defmodule Eshop.Products.CRUD do
   alias Eshop.Products.Schemas.Product
   alias Eshop.Repo
 
-  def create(attrs) do
+  def create_product(attrs) do
     %Product{}
     |> Product.changeset(attrs)
     |> Repo.insert()
   end
 
-  def fetch(id) do
-    Repo.fetch(Product, id)
+  def fetch_product(id) do
+    case Repo.fetch(Product, id) do
+      {:ok, product} -> {:ok, product}
+      {:error, :not_found} -> {:error, "Product not found"}
+    end
   end
 
-  def list do
+  def list_products do
     Repo.all(from(p in Product, preload: :pricing_rules))
   end
 
-  def update(product, attrs) do
+  def update_product(product, attrs) do
     product
     |> Product.changeset(attrs)
     |> Repo.update()
   end
 
-  def delete(id) do
+  def delete_product(id) do
     case Repo.fetch(Product, id) do
       {:ok, product} -> Repo.delete(product)
-      {:error, :not_found} -> {:error, :not_found}
+      {:error, :not_found} -> {:error, "Product not found"}
     end
   end
 end
